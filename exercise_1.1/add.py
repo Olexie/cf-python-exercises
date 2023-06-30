@@ -1,0 +1,7 @@
+a = input('Type the first number: ')
+a = int(a)
+print(a)
+b = input('Type the second number: ')
+b = int(b)
+print(b)
+print(f'The result is {a + b}')
