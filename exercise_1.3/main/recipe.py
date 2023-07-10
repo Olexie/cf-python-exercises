@@ -64,7 +64,7 @@ for i in range (0 ,n):
 print('')
 print('Ingredients Available Across All Recipes')
 print('----------------------------------------')
-for ingredient in ingredients_list:
+for ingredient in sorted(ingredients_list):
     print(ingredient)
 
     
