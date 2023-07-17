@@ -17,7 +17,8 @@ def take_recipe ():
     recipe = {
         'name': name, 
         'cooking_time': cooking_time_minutes, 
-        'ingredients': ingredients
+        'ingredients': ingredients,
+        'difficulty': get_difficulty(cooking_time_minutes, len(ingredients))
     }
     return recipe
 
@@ -29,7 +30,7 @@ def get_difficulty(cooking_time_minutes, number_of_ingredients):
         difficulty = 'Medium'
     elif cooking_time_minutes >= 10 and number_of_ingredients <4:
         difficulty = 'Intermediate'
-    elif cooking_time_minutes >=10 and number_of_ingredients >4:
+    elif cooking_time_minutes >=10 and number_of_ingredients >=4:
         difficulty = 'Hard'
     
     return difficulty
