@@ -76,6 +76,7 @@ def create_recipe():
 
                 correct_input_name =True
 
+                
                 correct_input_cooking_time_minutes = False
                 while correct_input_cooking_time_minutes == False:
                     cooking_time_minutes = input("\nEnter the cooking time: ")
@@ -84,41 +85,41 @@ def create_recipe():
 
                     else:
                       print("Please enter a number")
-        else:
-            print("The name should contain less than 50 characters.")
+            else:
+              print("The name should contain less than 50 characters.")
 
-        correct_input_number = False
-        while correct_input_number == False:
-            ing_nber = input("How many ingredients would you like to enter?: ")
-            if ing_nber.isnumeric()==True:
-                correct_input_number = True
+            correct_input_number = False
+            while correct_input_number == False:
+               ing_nber = input("How many ingredients would you like to enter?: ")
+               if ing_nber.isnumeric()==True:
+                  correct_input_number = True
 
-                for _ in range(int(ing_nber)):
+                  for _ in range(int(ing_nber)):
                     ingredient = input("Enter an ingredient: ")
                     recipe_ingredients.append(ingredient)
-        else:
-            correct_input_number = False
-            print ("Please enter a positive number")
+               else:
+                  correct_input_number = False
+                  print ("Please enter a positive number")
 
     # Converting list of ingredients into a string
-recipe_ingredients_str = ", ".join(recipe_ingredients)
-print(recipe_ingredients_str)
+        recipe_ingredients_str = ", ".join(recipe_ingredients)
+        print(recipe_ingredients_str)
 
-difficulty = calc_difficulty(int(cooking_time_minutes), recipe_ingredients)
+        difficulty = calc_difficulty(int(cooking_time_minutes), recipe_ingredients)
 
-recipe_entry = Recipe(
-        name = name,
-        cooking_time_minutes = int(cooking_time_minutes),
-        ingredients = recipe_ingredients_str,
-        difficulty = difficulty
+        recipe_entry = Recipe(
+            name = name,
+            cooking_time_minutes = int(cooking_time_minutes),
+            ingredients = recipe_ingredients_str,
+            difficulty = difficulty
     )
 
-print(recipe_entry)
+        print(recipe_entry)
 
-session.add(recipe_entry)
-session.commit()
+        session.add(recipe_entry)
+        session.commit()
 
-print("Recipe saved successfully")
+        print("Recipe saved successfully")
 
 
     #viewing all recipes
@@ -164,41 +165,41 @@ def search_by_ingredient():
                         print(str(tup[0]+1) + ". " + tup[1])
 
             try:
-                        ingredient_searched_nber = input("\nEnter the number corresponding number from the list above")
+                ingredient_searched_nber = input("\nEnter the number corresponding number from the list above")
 
-                        ingredients_nber_list_searched = ingredient_searched_nber.split(" ")
+                ingredients_nber_list_searched = ingredient_searched_nber.split(" ")
 
-                        ingredient_searched_list =[]
+                ingredient_searched_list =[]
 
-                        for ingredient_searched_nber in ingredients_nber_list_searched:
-                            ingredient_searched_index = int(ingredient_searched_nber) - 1
-                            ingredient_searched = all_ingredients_list[ingredient_searched_index][1]
+                for ingredient_searched_nber in ingredients_nber_list_searched:
+                    ingredient_searched_index = int(ingredient_searched_nber) - 1
+                    ingredient_searched = all_ingredients_list[ingredient_searched_index][1]
 
-                            ingredient_searched_list.append(ingredient_searched)
-                        print("\nIngredients selected: ", ingredient_searched_list)
+                    ingredient_searched_list.append(ingredient_searched)
+                print("\nIngredients selected: ", ingredient_searched_list)
 
 
-                        conditions =[]
+                conditions =[]
 
-                        for ingredients in ingredient_searched_list:
-                            like_term = "%"+ingredient+"%"
+                for ingredients in ingredient_searched_list:
+                    like_term = "%"+ingredient+"%"
 
-                            condition = Recipe.ingredients.like(like_term)
-                            conditions.append(condition)
-                        print(" Conditions: ", conditions)
+                    condition = Recipe.ingredients.like(like_term)
+                    conditions.append(condition)
+                print(" Conditions: ", conditions)
 
-                        searched_recipes = session.query(Recipe).filter(*conditions).all()
+                searched_recipes = session.query(Recipe).filter(*conditions).all()
 
-                        print(searched_recipes)
+                print(searched_recipes)
 
             except:
-                        print("Inexpecyed error occured")
+                print("Unexpected error occured")
 
             else:
 
-                        print("searched_recipes: ")
-                        for recipe in searched_recipes:
-                            print(recipe)
+                print("searched_recipes: ")
+                for recipe in searched_recipes:
+                    print(recipe)
                         
 def delete_recipe():
 
@@ -246,7 +247,8 @@ def edit_recipe():
         recipe_id_for_edit = int((input("\nEnter the ID of the recipe you want to edit: ")))
 
 
-        print(session.query(recipe).with_entities(Recipe.id).all())
+        print(session.query(Recipe).with_entities(Recipe.id).all())
+        recipes_id_tup_list = session.query(Recipe).with_entities(Recipe.id).all()
         recipes_id_list = []
 
         for recipe_tup in recipes_id_tup_list:
@@ -268,23 +270,23 @@ def edit_recipe():
 
             column_for_update = int(input("\nEnter the data you want to update"))
 
-            update_value = (input("\nEnter the new value: "))
-            print("Choice: ", update_value)
+            updated_value = (input("\nEnter the new value: "))
+            print("Choice: ", updated_value)
 
 
             if column_for_update ==1:
                 print("You've selected the name to update")
-                session.query(Recipe).filter(Recipe.id == recipe_id_for_edit).update({Recipe.name: update_value})
+                session.query(Recipe).filter(Recipe.id == recipe_id_for_edit).update({Recipe.name: updated_value})
                 session.commit()
 
             elif column_for_update == 2:
                 print("you've selected the cooking time for update")
-                session.query(Recipe).filter(Recipe.id == recipe_id_for_edit).update({Recipe.cooking_time_minutes: update_value})
+                session.query(Recipe).filter(Recipe.id == recipe_id_for_edit).update({Recipe.cooking_time_minutes: updated_value})
                 session.commit()
 
             elif column_for_update == 3:
                 print("You've selected ingredients to update")
-                session.query(Recipe).filter(Recipe.id == recipe_id_for_edit).update({Recipe.ingredients: update_value})
+                session.query(Recipe).filter(Recipe.id == recipe_id_for_edit).update({Recipe.ingredients: updated_value})
 
             else:
                 print("wrong input")
@@ -318,7 +320,7 @@ def main_menu():
         elif choice == "2":
             search_by_ingredient()
         elif choice == "3":
-            edit_recipe(recipe_ingredients)
+            edit_recipe()
         elif choice == "4":
             delete_recipe()
         elif choice == "5":
